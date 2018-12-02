@@ -103,6 +103,16 @@ public class Pokemon {
     //Mutators
     //////////////////////////////////////////////////////////////////////
 
+    public void setStats(double hp, double attack, double defense, double specialAttack, double specialDefence, double speed){
+        maxHP = hp;
+        currHP = hp;
+        this.attack = attack;
+        this.defense = defense;
+        this.specialAttack = specialAttack;
+        this.specialDefence = specialDefence;
+        this.speed = speed;
+    } // setStats
+
     public void faint(){ fainted = true; }
 
     // Statuses might be left out for the small AI

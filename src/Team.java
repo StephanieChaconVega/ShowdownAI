@@ -6,6 +6,7 @@ public class Team {
     LinkedList<Pokemon> team;
 
     public Team(Pokemon slot1, Pokemon slot2, Pokemon slot3, Pokemon slot4, Pokemon slot5, Pokemon slot6){
+        team = new LinkedList<>();
 
         // Populate the team
         if(slot1 != null)
@@ -59,5 +60,16 @@ public class Team {
     } // numFainted
 
     public int teamSize(){ return team.size(); }
+
+    // Assumes the Pokemon exists and is in this team
+    public Pokemon findPokemon(String species){
+        Pokemon found = null;
+        for(int i = 0; i < team.size(); i++){
+            if(team.get(i).getSpecies().equals(species))
+                found = team.get(i);
+        } // for
+
+        return found;
+    } // findPokemon
 
 }// Team

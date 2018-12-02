@@ -309,7 +309,7 @@ public class ShowdownHelper extends Helper {
         sleep(500);
         clickAt(By.cssSelector("button[value=gen7ubers]"));
         clickAt(By.cssSelector("button[name=validate]"));
-        waitForElementPresent(By.cssSelector("p.buttonbar"));
+        waitForElementPresent(By.cssSelector("div.ps-popup p.buttonbar"));
         clickAt(By.cssSelector("button[name=close]"));
 
         clickAt(By.cssSelector("i.fa.fa-home"));
