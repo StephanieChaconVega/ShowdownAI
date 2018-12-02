@@ -1,15 +1,23 @@
 public class Pokemon {
     private String species;
+    private Move move1;
+    private Move move2;
+    private Move move3;
+    private Move move4;
     // Pokemon can have two types.
     // type2 is null if the Pokemon has only one type
     private Type type1;
     private Type type2;
+    // 'F' = Female
+    // 'M' = Male
+    // '-' = Genderless
     private char gender;
     private boolean fainted;
     private Status status;
     private boolean confused;
     private boolean infatuated;
-    // Probably omit items for the small implementation
+    // Omitting items for the small implementation
+    // "" = no item
     private String item;
 
     // Stats
@@ -21,8 +29,12 @@ public class Pokemon {
     private double attack;
     private double specialAttack;
 
-    public Pokemon(String species, Type type1, Type type2, char gender, String item){
+    public Pokemon(String species, Move move1, Move move2, Move move3, Move move4, Type type1, Type type2, char gender, String item){
         this.species = species;
+        this.move1 = move1;
+        this.move2 = move2;
+        this.move3 = move3;
+        this.move4 = move4;
         this.type1 = type1;
         this.type2 = type2;
         this.gender = gender;
@@ -38,6 +50,17 @@ public class Pokemon {
     //////////////////////////////////////////////////////////////////////
 
     public String getSpecies(){ return species; }
+
+    public Move[] getMoves(){
+        Move moves[] = new Move[4];
+
+        moves[0] = move1;
+        moves[1] = move2;
+        moves[2] = move3;
+        moves[3] = move4;
+
+        return moves;
+    }
 
     public boolean isDualType(){ return (type1 != null && type2 != null); }
 
@@ -88,11 +111,21 @@ public class Pokemon {
 
     public void removeStatus(){ this.status = null; }
 
+    public void heal(double recoveredHP){
+        currHP += recoveredHP;
+
+        // prevent overhealing
+        if(currHP > maxHP)
+            currHP = maxHP;
+
+    } // heal
+
     // Take damage from an opposing Pokemon's attack
     // Calculates damage based on the in-game formula
+    // Returns the value of the damage taken
     // https://bulbapedia.bulbagarden.net/wiki/Damage
-    public void takeDamage(Move move, int attackingStat, Type oppType1, Type oppType2){
-        // The damage formular is as follows:
+    public double takeDamage(Move move, int attackingStat, Type oppType1, Type oppType2){
+        // The damage formula is as follows:
         // Damage = (((((2*level)/5)+2) * power * (attack stat/defense stat))/50)+2) * modifier
         // Modifier = weather * critical * random * STAB * type effectiveness * other
         // Level is assumed to be 100
@@ -136,6 +169,7 @@ public class Pokemon {
         if(currHP <= 0)
             faint();
 
+        return damage;
     } // takeDamage
 
     // Type matchup table

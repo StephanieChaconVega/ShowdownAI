@@ -982,7 +982,7 @@ public class ShowdownHelper extends Helper {
             side = "yourSide";
         }
         return (String)javascript(
-                "var pokeObj = app.curRoom.battle.[arguments[0]].pokemon[arguments[1]];" +
+                "var pokeObj = app.curRoom.battle[arguments[0]].pokemon[arguments[1]];" +
                         "var item = pokeObj.item;" +
                         "if (item == null || item == \"\")" +
                         "	return null;" +

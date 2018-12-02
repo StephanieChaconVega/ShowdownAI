@@ -5,7 +5,9 @@ public class Move {
     private double power; // power = 0 if the move is a Status move
     private Type type;
     private Category category;
+    private boolean healing;
     private double accuracy;
+    // Won't use priority moves in the simple AI, so this will always be set to 1
     private double priority;
 
     // Chances of secondary effects
@@ -18,12 +20,13 @@ public class Move {
     private double infatuateChance;
     private double confuseChance;
 
-    public Move(double pp, double power, Type type, Category category, double accuracy, double priority){
+    public Move(double pp, double power, Type type, Category category, boolean healing, double accuracy, double priority){
         maxPP = pp;
         currPP = pp;
         this.power = power;
         this.type = type;
         this.category = category;
+        this.healing = healing;
         this.accuracy = accuracy;
         this.priority = priority;
 

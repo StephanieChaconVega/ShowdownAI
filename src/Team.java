@@ -45,6 +45,19 @@ public class Team {
         } // for
 
         return fainted;
-    }
+    } // allFainted
+
+    public int numFainted(){
+        int fainted = 0;
+
+        for(int i = 0; i < team.size(); i++){
+            if(!team.get(i).isFainted())
+                fainted++;
+        } // for
+
+        return fainted;
+    } // numFainted
+
+    public int teamSize(){ return team.size(); }
 
 }// Team
