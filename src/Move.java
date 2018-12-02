@@ -1,5 +1,6 @@
 public class Move {
     // Move details
+    private String name;
     private double maxPP;
     private double currPP;
     private double power; // power = 0 if the move is a Status move
@@ -20,7 +21,8 @@ public class Move {
     private double infatuateChance;
     private double confuseChance;
 
-    public Move(double pp, double power, Type type, Category category, boolean healing, double accuracy, double priority){
+    public Move(String name, double pp, double power, Type type, Category category, boolean healing, double accuracy, double priority){
+        this.name = name;
         maxPP = pp;
         currPP = pp;
         this.power = power;
@@ -39,6 +41,8 @@ public class Move {
         infatuateChance = 0;
         confuseChance = 0;
     } // Constructor
+
+    public String getName(){ return name; }
 
     public double getPower() {
         return power;

@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import scala.testing.Show;
 import seleniumhelper.ShowdownHelper;
 import seleniumhelper.ShowdownHelper.TurnEndStatus;
 import seleniumhelper.loginterpret.*;
@@ -58,28 +59,28 @@ public class AI {
         // As a result, the values will all be hard coded
         // This will be changed in a later implementation
 
-        Move crunch = new Move(24, 80, Type.DARK, Category.PHYSICAL, false, 100, 1);
-        Move liquidation = new Move(16, 85, Type.WATER, Category.PHYSICAL, false, 100, 1);
-        Move poisonFang = new Move(24, 50, Type.POISON, Category.PHYSICAL, false, 100, 1);
-        Move iceFang = new Move(24, 65, Type.ICE, Category.PHYSICAL, false, 95, 1);
+        Move crunch = new Move("Crunch", 24, 80, Type.DARK, Category.PHYSICAL, false, 100, 1);
+        Move liquidation = new Move("Liquidation", 16, 85, Type.WATER, Category.PHYSICAL, false, 100, 1);
+        Move poisonFang = new Move("Poison Fang", 24, 50, Type.POISON, Category.PHYSICAL, false, 100, 1);
+        Move iceFang = new Move("Ice Fang", 24, 65, Type.ICE, Category.PHYSICAL, false, 95, 1);
 
         Pokemon sharpedo = new Pokemon("Sharpedo", crunch, liquidation, poisonFang, iceFang,
                 Type.WATER, Type.DARK, 'M', "");
         sharpedo.setStats(281, 339, 116, 203, 117, 317);
 
-        Move dazzlingGleam = new Move(16, 80, Type.FAIRY, Category.SPECIAL, false, 100, 1);
-        Move psychic = new Move(16, 90, Type.PSYCHIC, Category.SPECIAL, false, 100, 1);
-        Move energyBall = new Move(16, 90, Type.GRASS, Category.SPECIAL, false, 100, 1);
-        Move shadowBall = new Move(24, 80, Type.GHOST, Category.SPECIAL, false, 100, 1);
+        Move dazzlingGleam = new Move("Dazzling Gleam", 16, 80, Type.FAIRY, Category.SPECIAL, false, 100, 1);
+        Move psychic = new Move("Psychic", 16, 90, Type.PSYCHIC, Category.SPECIAL, false, 100, 1);
+        Move energyBall = new Move("Energy Ball", 16, 90, Type.GRASS, Category.SPECIAL, false, 100, 1);
+        Move shadowBall = new Move("Shadow Ball", 24, 80, Type.GHOST, Category.SPECIAL, false, 100, 1);
 
         Pokemon celebi = new Pokemon("Celebi", dazzlingGleam, psychic, energyBall, shadowBall,
                 Type.PSYCHIC, Type.GRASS, '-', "");
         celebi.setStats(341, 184, 236, 299, 237, 328);
 
-        Move firePunch = new Move(24,75, Type.FIRE, Category.PHYSICAL, false, 100, 1);
-        Move ironHead = new Move(24, 80, Type.STEEL, Category.PHYSICAL, false, 100, 1);
-        Move thunderPunch = new Move(24, 75, Type.ELECTRIC, Category.PHYSICAL, false, 100, 1);
-        Move shadowBone = new Move(16, 85, Type.GHOST, Category.PHYSICAL, false, 100, 1);
+        Move firePunch = new Move("Fire Punch", 24,75, Type.FIRE, Category.PHYSICAL, false, 100, 1);
+        Move ironHead = new Move("Iron Head", 24, 80, Type.STEEL, Category.PHYSICAL, false, 100, 1);
+        Move thunderPunch = new Move("Thunder Punch" , 24, 75, Type.ELECTRIC, Category.PHYSICAL, false, 100, 1);
+        Move shadowBone = new Move("Shadow Bone", 16, 85, Type.GHOST, Category.PHYSICAL, false, 100, 1);
 
         Pokemon marowak = new Pokemon("Marowak-Alola", firePunch, ironHead, thunderPunch, shadowBone,
                 Type.FIRE, Type.GHOST, 'M', "");
@@ -91,17 +92,17 @@ public class AI {
         // Normally, the AI would not have this much information about the opponent
         // But for the purposes of this assignment, this "cheat sheet" is acceptable
 
-        Move scald = new Move(24, 80, Type.WATER, Category.SPECIAL, false, 100, 1);
+        Move scald = new Move("Scald", 24, 80, Type.WATER, Category.SPECIAL, false, 100, 1);
         // psychic already defined
-        Move iceBeam = new Move(16, 90, Type.ICE, Category.SPECIAL, false, 100, 1);
+        Move iceBeam = new Move("Ice Beam",16, 90, Type.ICE, Category.SPECIAL, false, 100, 1);
         // energyBall already defined
 
         Pokemon manaphy = new Pokemon("Manaphy", scald, psychic, iceBeam, energyBall,
                 Type.WATER, null, '-', "");
         manaphy.setStats(341, 184, 236, 299, 237, 328);
 
-        Move gigaDrain = new Move(16, 75, Type.GRASS, Category.SPECIAL, true, 100, 1);
-        Move sludgeBomb = new Move(16, 90, Type.POISON, Category.SPECIAL, false, 100, 1);
+        Move gigaDrain = new Move("Giga Drain", 16, 75, Type.GRASS, Category.SPECIAL, true, 100, 1);
+        Move sludgeBomb = new Move("Sludge Bomb", 16, 90, Type.POISON, Category.SPECIAL, false, 100, 1);
         // shadowBall already defined
         // dazzlingGleam already defined
 
@@ -109,8 +110,8 @@ public class AI {
                 Type.GRASS, Type.POISON, 'F', "");
         roserade.setStats(324, 130, 166, 383, 247, 216);
 
-        Move flamethrower = new Move(24, 90, Type.FIRE, Category.SPECIAL, false, 100, 1);
-        Move darkPulse = new Move(24, 80, Type.DARK, Category.SPECIAL, false, 100, 1);
+        Move flamethrower = new Move("Flamethrower", 24, 90, Type.FIRE, Category.SPECIAL, false, 100, 1);
+        Move darkPulse = new Move("Dark Pulse", 24, 80, Type.DARK, Category.SPECIAL, false, 100, 1);
         // shadowBall already defined
         // psychic already defined
 
@@ -124,6 +125,7 @@ public class AI {
 
             State initialState = startBattle(showdown, myTeamImportable, myTeam, opponentsTeam);
             System.out.println("Initial state created successfully"); /////////////////////////////////// Debugging
+            selectMove(showdown, initialState.getMyLead().getMoves()[0]); // make sure moves are working
 
         }catch(Exception e){
             System.out.println("An error has occurred");
@@ -171,6 +173,10 @@ public class AI {
 
         return initialState;
     } // startBattle
+
+    private static void selectMove(ShowdownHelper showdown, Move move) throws Exception{
+        showdown.doMove(move.getName());
+    }
 
 
     private static int randomInt(Random random, int low, int high) {
