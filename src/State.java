@@ -20,8 +20,8 @@ public class State {
     } // Constructor
 
     public State(State src){
-        this.myTeam = src.myTeam;
-        this.opponentsTeam = src.opponentsTeam;
+        this.myTeam = new Team(src.myTeam);
+        this.opponentsTeam = new Team(src.opponentsTeam);
         this.myLead = src.myLead;
         this.opponentsLead = src.opponentsLead;
         this.winState = src.winState;

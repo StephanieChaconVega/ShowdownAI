@@ -45,6 +45,21 @@ public class Pokemon {
         this.item = item;
     } // Constructor
 
+    public Pokemon(Pokemon src){
+        species = src.species;
+        move1 = new Move(src.move1);
+        move2 = new Move(src.move2);
+        move3 = new Move(src.move3);
+        move4 = new Move(src.move4);
+        type1 = src.type1;
+        type2 = src.type2;
+        fainted = src.fainted;
+        status = src.status;
+        confused = src.confused;
+        infatuated = src.infatuated;
+        item = src.item;
+    } // Copy constructor
+
     //////////////////////////////////////////////////////////////////////
     //Accessors
     //////////////////////////////////////////////////////////////////////
@@ -134,7 +149,7 @@ public class Pokemon {
     // Calculates damage based on the in-game formula
     // Returns the value of the damage taken
     // https://bulbapedia.bulbagarden.net/wiki/Damage
-    public double takeDamage(Move move, int attackingStat, Type oppType1, Type oppType2){
+    public double takeDamage(Move move, Pokemon opponent){
         // The damage formula is as follows:
         // Damage = (((((2*level)/5)+2) * power * (attack stat/defense stat))/50)+2) * modifier
         // Modifier = weather * critical * random * STAB * type effectiveness * other
@@ -148,7 +163,7 @@ public class Pokemon {
 
         double STAB = 1;
 
-        if(move.getType() == oppType1 || move.getType() == oppType2)
+        if(move.getType() == opponent.type1 || move.getType() == opponent.type2)
             STAB = 1.5;
 
         double effectiveness = calcEffectiveness(move.getType());
@@ -160,9 +175,9 @@ public class Pokemon {
             damage = 42 * move.getPower();
 
             if(move.getCategory() == Category.PHYSICAL)
-                damage *= (attackingStat/defense);
+                damage *= (opponent.attack/defense);
             else if(move.getCategory() == Category.SPECIAL)
-                damage *= (attackingStat/specialDefence);
+                damage *= (opponent.specialAttack/specialDefence);
 
             damage /= 50;
             damage += 2;

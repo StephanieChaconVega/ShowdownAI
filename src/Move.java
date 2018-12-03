@@ -42,6 +42,28 @@ public class Move {
         confuseChance = 0;
     } // Constructor
 
+
+    public Move(Move src){
+        name = src.name;
+        maxPP = src.maxPP;
+        currPP = src.currPP;
+        power = src.power;
+        type = src.type;
+        category = src.category;
+        healing = src.healing;
+        accuracy = src.accuracy;
+        priority = src.priority;
+
+        // Change this if I have time...
+        critChance = 0;
+        burnChance = 0;
+        paralyzeChance = 0;
+        freezeChance = 0;
+        poisonChance = 0;
+        infatuateChance = 0;
+        confuseChance = 0;
+    } // Copy constructor
+
     public String getName(){ return name; }
 
     public double getPower() {
@@ -55,4 +77,8 @@ public class Move {
     public Category getCategory() {
         return category;
     }
+
+    public boolean isHealing(){ return healing; }
+
+    public void oneUse(){ currPP--; }
 } // Move

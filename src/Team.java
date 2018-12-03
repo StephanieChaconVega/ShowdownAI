@@ -28,6 +28,16 @@ public class Team {
             team.add(slot6);
     } // Constructor
 
+    public Team(Team src){
+        team = new LinkedList<>();
+
+        // Copy the team
+        for(int i = 0; i < src.teamSize(); i++){
+            team.add(new Pokemon(src.atSlot(i)));
+        } // for
+
+    } // Copy constructor
+
     public Pokemon atSlot(int index){
         Pokemon found = null;
 

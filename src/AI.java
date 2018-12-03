@@ -174,6 +174,93 @@ public class AI {
         return initialState;
     } // startBattle
 
+    // Simulate the results of given actions performed on each turn
+    // These actions can be using a move or switching out the active Pokemon
+    // Create a new state with the result of this turn and return it
+    // The action not taken is null
+    private static State simulateTurn(State initial, Move aiMove, Move opponentMove, Pokemon aiSwitch, Pokemon opponentSwitch){
+        State newState = new State(initial);
+
+        // Both sides use a move
+        if(aiMove != null && opponentMove != null){
+            // Find who goes first (is our Pokemon faster?)
+            boolean aiFirst = (newState.getMyLead().getSpeed() > newState.getOpponentsLead().getSpeed());
+            if(aiFirst){
+                // Perform the moves in the correct order
+                newState = simulateMove(newState, true, aiMove);
+                newState = simulateMove(newState, false, opponentMove);
+            }else{
+                newState = simulateMove(newState, false, opponentMove);
+                newState = simulateMove(newState, true, aiMove);
+            } // if/else
+        }
+
+        // AI uses a move, opponent switches out
+        else if(aiMove != null && opponentSwitch != null){
+
+        }
+
+        // AI switches out, opponent uses a move
+        else if(aiSwitch != null && opponentMove != null){
+
+        }
+
+        // Both sides switch out
+        else if(aiSwitch != null && opponentSwitch != null){
+
+        }
+
+        return newState;
+    }
+
+    private static State simulateMove(State state, boolean aiMove, Move move){
+        if(aiMove){
+            if(!state.getOpponentsLead().isFainted()) {
+                // AI's lead Pokemon deals damage to opponent's Pokemon
+                double damage = state.getOpponentsLead().takeDamage(move, state.getMyLead());
+
+                // Pokemon faints once its HP drops below 0
+                if (state.getOpponentsLead().getCurrHP() <= 0)
+                    state.getOpponentsLead().faint();
+
+                // Check if this move heals
+                if (move.isHealing() && (move.getCategory() == Category.SPECIAL || move.getCategory() == Category.PHYSICAL)) {
+                    // if this move also deals damage, it heals by 50% of the damage dealt
+                    state.getMyLead().heal(damage / 2);
+                } // if
+            } // if
+
+            // Regular healing moves are performed if the opponent is fainted or not
+            // They heal 50% of max HP
+            if(move.isHealing() && move.getCategory() == Category.STATUS)
+                state.getMyLead().heal(state.getMyLead().getMaxHP() / 2);
+
+        }else{ // if it's the opponent's move...
+            if(!state.getMyLead().isFainted()) {
+                // Opponent's lead Pokemon deals damage to AI's Pokemon
+                double damage = state.getMyLead().takeDamage(move, state.getOpponentsLead());
+
+                // Pokemon faints once its HP drops below 0
+                if (state.getMyLead().getCurrHP() <= 0)
+                    state.getMyLead().faint();
+
+                // Check if this move heals
+                if (move.isHealing() && (move.getCategory() == Category.SPECIAL || move.getCategory() == Category.PHYSICAL)) {
+                    // if this move also deals damage, it heals by 50% of the damage dealt
+                    state.getOpponentsLead().heal(damage / 2);
+                } // if
+            } // if
+
+            // Regular healing moves are performed if the opponent is fainted or not
+            // They heal 50% of max HP
+            if(move.isHealing() && move.getCategory() == Category.STATUS)
+                state.getOpponentsLead().heal(state.getOpponentsLead().getMaxHP() / 2);
+
+        } // if/else
+
+        return state;
+    } // simulateMove
+
     private static void selectMove(ShowdownHelper showdown, Move move) throws Exception{
         showdown.doMove(move.getName());
     }
@@ -181,6 +268,6 @@ public class AI {
 
     private static int randomInt(Random random, int low, int high) {
         return random.nextInt(high) + low;
-    } // randomInt
+    }
 
 }
