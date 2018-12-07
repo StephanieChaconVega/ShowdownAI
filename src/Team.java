@@ -47,6 +47,15 @@ public class Team {
         return found;
     } // atSlot
 
+    public String atSlotName(int index){
+        String name = "";
+
+        if(index < team.size())
+            name = team.get(index).getSpecies();
+
+        return name;
+    }
+
     public boolean allFainted(){
         boolean fainted = true;
 

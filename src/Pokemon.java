@@ -79,6 +79,21 @@ public class Pokemon {
         return moves;
     }
 
+    public Move findMove(String name){
+        Move found = null;
+
+        if(move1.getName().equals(name))
+            found = move1;
+        else if(move2.getName().equals(name))
+            found = move2;
+        else if(move3.getName().equals(name))
+            found = move3;
+        else if(move4.getName().equals(name))
+            found = move4;
+
+        return found;
+    } // findMove
+
     public boolean isDualType(){ return (type1 != null && type2 != null); }
 
     public Type getType1(){ return type1; }

@@ -49,6 +49,29 @@ public class State {
 
     public Pokemon getOpponentsLead(){ return opponentsLead; }
 
+    // Return the index that the AI's lead Pokemon is in
+    public int myLeadIndex(){
+        int index = 0;
+        for(int i = 0; i < myTeam.teamSize(); i++){
+            if(myTeam.atSlot(i).getSpecies().equals(myLead.getSpecies()))
+                index = i;
+        } // for
+
+        return index;
+    } // myLeadIndex
+
+    // Return the index that the opponent's lead Pokemon is in
+    public int opponentLeadIndex(){
+        int index = 0;
+
+        for(int i = 0; i < opponentsTeam.teamSize(); i++){
+            if(opponentsTeam.atSlot(i).getSpecies().equals(opponentsLead.getSpecies()))
+                index = i;
+        } // for
+
+        return index;
+    } // myLeadIndex
+
     public Team getMyTeam(){ return myTeam; }
 
     public Team getOpponentsTeam(){ return opponentsTeam; }
@@ -56,6 +79,22 @@ public class State {
     public void swapMyLead(Pokemon newLead) { myLead = newLead; }
 
     public void swapOpponentsLead(Pokemon newLead) { opponentsLead = newLead; }
+
+    public boolean allMyPokemonFainted(){
+        boolean fainted = false;
+        if(myTeam.allFainted())
+            fainted = true;
+
+        return fainted;
+    } // allMyPokemonFainted
+
+    public boolean allOppsPokemonFainted(){
+        boolean fainted = false;
+        if(opponentsTeam.allFainted())
+            fainted = true;
+
+        return fainted;
+    } // allOppsPokemonFainted
 
     //////////////////////////////////////////////////////////////////////
     //Mutators
@@ -79,4 +118,15 @@ public class State {
         else
             winState = 0;
     } // setWinState
+
+    public boolean checkFainted(boolean aiTeam, int slot){
+        boolean fainted = false;
+
+        if(aiTeam)
+            fainted = myTeam.atSlot(slot).isFainted();
+        else
+            fainted = opponentsTeam.atSlot(slot).isFainted();
+
+        return fainted;
+    }
 }
