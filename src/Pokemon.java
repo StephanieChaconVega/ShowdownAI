@@ -58,6 +58,8 @@ public class Pokemon {
         confused = src.confused;
         infatuated = src.infatuated;
         item = src.item;
+
+        this.setStats(src.maxHP, src.currHP, src.attack, src.defense, src.specialAttack, src.specialDefence, src.speed);
     } // Copy constructor
 
     //////////////////////////////////////////////////////////////////////
@@ -118,9 +120,9 @@ public class Pokemon {
     //Mutators
     //////////////////////////////////////////////////////////////////////
 
-    public void setStats(double hp, double attack, double defense, double specialAttack, double specialDefence, double speed){
-        maxHP = hp;
-        currHP = hp;
+    public void setStats(double maxHP, double currHP, double attack, double defense, double specialAttack, double specialDefence, double speed){
+        this.maxHP = maxHP;
+        this.currHP = currHP;
         this.attack = attack;
         this.defense = defense;
         this.specialAttack = specialAttack;
@@ -191,6 +193,7 @@ public class Pokemon {
         // Apply the damage to the HP
         currHP -= damage;
 
+        // add floor calculation here
         if(currHP <= 0)
             faint();
 
@@ -201,8 +204,8 @@ public class Pokemon {
     // https://bulbapedia.bulbagarden.net/wiki/Type#Type_effectiveness
     // Check if of a move with Type type has a modified effectiveness on this Pokemon
     // There's probably a better way to do this lol
-    public int calcEffectiveness(Type type){
-        int effectiveness = 1;
+    public double calcEffectiveness(Type type){
+        double effectiveness = 1;
 
         //////////////////////////
         // Immunities

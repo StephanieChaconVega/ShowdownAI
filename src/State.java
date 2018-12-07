@@ -22,8 +22,8 @@ public class State {
     public State(State src){
         this.myTeam = new Team(src.myTeam);
         this.opponentsTeam = new Team(src.opponentsTeam);
-        this.myLead = src.myLead;
-        this.opponentsLead = src.opponentsLead;
+        this.myLead = new Pokemon(src.myLead);
+        this.opponentsLead = new Pokemon(src.opponentsLead);
         this.winState = src.winState;
     } // Copy constructor
 
@@ -60,6 +60,16 @@ public class State {
     //////////////////////////////////////////////////////////////////////
     //Mutators
     //////////////////////////////////////////////////////////////////////
+
+    public void setMyLead(String newLead){
+        // Find the Pokemon in the linked list first
+        myLead = myTeam.findPokemon(newLead);
+    } // setMyLead
+
+    public void setOpponentsLead(String newLead){
+        // Find the Pokemon in the linked list first
+        opponentsLead = opponentsTeam.findPokemon(newLead);
+    } // setMyLead
 
     public void setWinState(){
         if(myTeam.allFainted())

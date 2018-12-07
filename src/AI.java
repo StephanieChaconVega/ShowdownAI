@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
+
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import scala.testing.Show;
@@ -66,7 +68,7 @@ public class AI {
 
         Pokemon sharpedo = new Pokemon("Sharpedo", crunch, liquidation, poisonFang, iceFang,
                 Type.WATER, Type.DARK, 'M', "");
-        sharpedo.setStats(281, 339, 116, 203, 117, 317);
+        sharpedo.setStats(281, 281, 339, 116, 203, 117, 317);
 
         Move dazzlingGleam = new Move("Dazzling Gleam", 16, 80, Type.FAIRY, Category.SPECIAL, false, 100, 1);
         Move psychic = new Move("Psychic", 16, 90, Type.PSYCHIC, Category.SPECIAL, false, 100, 1);
@@ -75,7 +77,7 @@ public class AI {
 
         Pokemon celebi = new Pokemon("Celebi", dazzlingGleam, psychic, energyBall, shadowBall,
                 Type.PSYCHIC, Type.GRASS, '-', "");
-        celebi.setStats(341, 184, 236, 299, 237, 328);
+        celebi.setStats(341, 341, 184, 236, 299, 237, 328);
 
         Move firePunch = new Move("Fire Punch", 24,75, Type.FIRE, Category.PHYSICAL, false, 100, 1);
         Move ironHead = new Move("Iron Head", 24, 80, Type.STEEL, Category.PHYSICAL, false, 100, 1);
@@ -84,7 +86,7 @@ public class AI {
 
         Pokemon marowak = new Pokemon("Marowak-Alola", firePunch, ironHead, thunderPunch, shadowBone,
                 Type.FIRE, Type.GHOST, 'M', "");
-        marowak.setStats(323, 284, 256, 122, 198, 126);
+        marowak.setStats(323, 323, 284, 256, 122, 198, 126);
 
         Team myTeam = new Team(sharpedo, celebi, marowak, null, null, null);
 
@@ -99,7 +101,7 @@ public class AI {
 
         Pokemon manaphy = new Pokemon("Manaphy", scald, psychic, iceBeam, energyBall,
                 Type.WATER, null, '-', "");
-        manaphy.setStats(341, 184, 236, 299, 237, 328);
+        manaphy.setStats(341, 341, 184, 236, 299, 237, 328);
 
         Move gigaDrain = new Move("Giga Drain", 16, 75, Type.GRASS, Category.SPECIAL, true, 100, 1);
         Move sludgeBomb = new Move("Sludge Bomb", 16, 90, Type.POISON, Category.SPECIAL, false, 100, 1);
@@ -108,7 +110,7 @@ public class AI {
 
         Pokemon roserade = new Pokemon("Roserade", gigaDrain, sludgeBomb, shadowBall, dazzlingGleam,
                 Type.GRASS, Type.POISON, 'F', "");
-        roserade.setStats(324, 130, 166, 383, 247, 216);
+        roserade.setStats(324, 324, 130, 166, 383, 247, 216);
 
         Move flamethrower = new Move("Flamethrower", 24, 90, Type.FIRE, Category.SPECIAL, false, 100, 1);
         Move darkPulse = new Move("Dark Pulse", 24, 80, Type.DARK, Category.SPECIAL, false, 100, 1);
@@ -117,7 +119,7 @@ public class AI {
 
         Pokemon chandelure = new Pokemon("Chandelure", flamethrower, darkPulse, shadowBall, psychic,
                 Type.GHOST, Type.FIRE, 'M', "");
-        chandelure.setStats(323, 103, 216, 427, 218, 196);
+        chandelure.setStats(323, 323, 103, 216, 427, 218, 196);
 
         Team opponentsTeam = new Team(manaphy, roserade, chandelure, null, null, null);
 
@@ -125,6 +127,7 @@ public class AI {
 
             State initialState = startBattle(showdown, myTeamImportable, myTeam, opponentsTeam);
             System.out.println("Initial state created successfully"); /////////////////////////////////// Debugging
+
             selectMove(showdown, initialState.getMyLead().getMoves()[0]); // make sure moves are working
 
         }catch(Exception e){
@@ -145,7 +148,8 @@ public class AI {
         TurnEndStatus startStatus = showdown.waitForBattleStart();
         if (startStatus == TurnEndStatus.SWITCH) {
             // Choose a random Pokemon to start with (slots 0 - 2)
-            showdown.switchTo(randomInt(new Random(), 0, 2));
+            //showdown.switchTo(randomInt(new Random(), 0, 2));
+            showdown.switchTo(0);// for testing
             showdown.waitForNextTurn(0);
         }
 
@@ -174,44 +178,83 @@ public class AI {
         return initialState;
     } // startBattle
 
-    // Simulate the results of given actions performed on each turn
+    // The two ints should be within the range 1-6
+    // There is a max of 6 possible actions either player can perform at one turn
+    // Use moves 1-4, switch to ally 1 or switch to ally 2
+    // If one or both of the selected actions are invalid, return null
+    public Action generateAction(int aiActionNum, int opponentActionNum){
+        Action newAction = new Action();
+
+
+
+        return newAction;
+    } // generateAction
+
+    public Stack<State> generateAllStates(State initial){
+        Stack<State> stateStack = new Stack<>();
+
+
+
+        return stateStack;
+    } // generateAllStates
+
+    // Simulate the results of given Actions performed on each turn
     // These actions can be using a move or switching out the active Pokemon
     // Create a new state with the result of this turn and return it
-    // The action not taken is null
-    private static State simulateTurn(State initial, Move aiMove, Move opponentMove, Pokemon aiSwitch, Pokemon opponentSwitch){
+    private static State simulateTurn(State initial, Action turnAction){
         State newState = new State(initial);
 
+        // AI is fainted, opponent is not
+        if(turnAction.isAIFainted() && !turnAction.isOpponentFainted()){
+            newState = simulateSwitch(newState, true, turnAction.getAISwitchingName());
+        }
+
+        // Opponent is fainted, AI is not
+        else if(turnAction.isOpponentFainted() && !turnAction.isAIFainted()){
+            newState = simulateSwitch(newState, false, turnAction.getOpponentSwitchingName());
+        }
+
+        // Both sides are fainted
+        else if(turnAction.isAIFainted() && turnAction.isOpponentFainted()){
+            newState = simulateSwitch(newState, true, turnAction.getAISwitchingName());
+            newState = simulateSwitch(newState, false, turnAction.getOpponentSwitchingName());
+        }
+
         // Both sides use a move
-        if(aiMove != null && opponentMove != null){
+        else if(turnAction.isAIMoving() && turnAction.isOpponentMoving()){
             // Find who goes first (is our Pokemon faster?)
             boolean aiFirst = (newState.getMyLead().getSpeed() > newState.getOpponentsLead().getSpeed());
             if(aiFirst){
                 // Perform the moves in the correct order
-                newState = simulateMove(newState, true, aiMove);
-                newState = simulateMove(newState, false, opponentMove);
+                newState = simulateMove(newState, true, turnAction.getAIMove());
+                newState = simulateMove(newState, false, turnAction.getOpponentMove());
             }else{
-                newState = simulateMove(newState, false, opponentMove);
-                newState = simulateMove(newState, true, aiMove);
+                newState = simulateMove(newState, false, turnAction.getOpponentMove());
+                newState = simulateMove(newState, true, turnAction.getAIMove());
             } // if/else
         }
 
         // AI uses a move, opponent switches out
-        else if(aiMove != null && opponentSwitch != null){
-
+        else if(turnAction.isAIMoving() && turnAction.isOpponentSwitching()){
+            newState = simulateSwitch(newState, false, turnAction.getOpponentSwitchingName());
+            newState = simulateMove(newState, true, turnAction.getAIMove());
         }
 
         // AI switches out, opponent uses a move
-        else if(aiSwitch != null && opponentMove != null){
-
+        else if(turnAction.isAISwitching() && turnAction.isOpponentMoving()){
+            newState = simulateSwitch(newState, true, turnAction.getAISwitchingName());
+            newState = simulateMove(newState, false, turnAction.getOpponentMove());
         }
 
         // Both sides switch out
-        else if(aiSwitch != null && opponentSwitch != null){
-
+        else if(turnAction.isAISwitching() && turnAction.isOpponentSwitching()){
+            newState = simulateSwitch(newState, true, turnAction.getAISwitchingName());
+            newState = simulateSwitch(newState, false, turnAction.getOpponentSwitchingName());
         }
 
         return newState;
-    }
+    } // simulateTurn
+
 
     private static State simulateMove(State state, boolean aiMove, Move move){
         if(aiMove){
@@ -260,6 +303,16 @@ public class AI {
 
         return state;
     } // simulateMove
+
+    private static State simulateSwitch(State state, boolean aiSwitch, String switchName){
+        if(aiSwitch){
+            state.setMyLead(switchName);
+        }else{
+            state.setOpponentsLead(switchName);
+        } // if/else
+
+        return state;
+    } // simulateSwitch
 
     private static void selectMove(ShowdownHelper showdown, Move move) throws Exception{
         showdown.doMove(move.getName());
