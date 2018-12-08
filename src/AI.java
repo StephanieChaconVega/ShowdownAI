@@ -217,7 +217,7 @@ public class AI {
                 aiActionValid = true;
         } // if/else
 
-        // If the AI Action is valid, continue filling up the Action with info on the opponent
+        // If the AI Action is valid, continue filling up the Action with info on the opponent's move
         if(aiActionValid){
             // Action 1-4: Select Move 1-4
             if(opponentActionNum == 1 || opponentActionNum == 2 || opponentActionNum == 3 || opponentActionNum == 4){
